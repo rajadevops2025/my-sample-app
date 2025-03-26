@@ -1,4 +1,4 @@
-# Base image with all dependencies
+# Base image
 FROM python:3.9-slim as builder
 
 WORKDIR /app
@@ -16,12 +16,11 @@ FROM builder as tester
 # Install test dependencies
 RUN pip install --no-cache-dir pytest
 
-# Copy test files (if any)
+# Create tests directory (won't fail if missing due to .dockerignore)
 COPY tests/ ./tests/
 COPY test_*.py ./
 
 # Production stage
 FROM builder as production
-
 EXPOSE 5000
 CMD ["python", "app/main.py"]
